@@ -1,12 +1,18 @@
+source: source
+build: build
 install: install
+
 cmake_args:
-  - '-DCMAKE_BUILD_TYPE=Release'
+  - -DCMAKE_BUILD_TYPE=Release
 
 depends:
   ninja: # must
     git: https://github.com/ninja-build/ninja
-    tag: v.1.9.0
+    tag: v1.9.0
   json:
     git: https://github.com/swm8023/JsonParser
+    cmake_args:
+      - -DBOOST_ROOT=F:/Source/boost_1_68_0
+      - -DJSON_USE_PARSER_SPIRIT=1
   # zlib:
   #   git: https://github.com/swm8023/glm
