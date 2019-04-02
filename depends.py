@@ -116,6 +116,12 @@ class Builder(object):
 
     def build_one_lib(self, lib_name, cmake_dir, cmake_args=None):
         source_dir = os.path.join(SOURCE_DIR, lib_name)
+        if not os.path.exists(source_dir):
+            source_dir = os.path.join(SOURCE_DIR, "..", lib_name)
+        if not os.path.exists(source_dir):
+            print 'error', lib_name, 'not exist'
+            return
+
         build_dir = os.path.join(BUILD_DIR, lib_name)
         install_dir = os.path.realpath(config.get("install", "install"))
 
@@ -159,7 +165,7 @@ class Builder(object):
                 if not os.path.exists(source_path):
                     run_cmd("cd %s && git clone %s %s"%(SOURCE_DIR, git_url, name))
                     if attr.get('tag'):
-                        run_cmd("cd %s && git checkout %s"%(source_path, attr.get("tag")))
+                        run_cmd("cd %s && git checkout %s"%(source_path, attr.get("tag")))    
 
 
     def work(self):
@@ -174,8 +180,8 @@ if __name__ == "__main__":
             Builder().clean()
         if sys.argv[1] == "build":
             b = Builder()
-            b.build_ninja(sys.argv[2])
-            b.build_libs()
+            b.build_ninja()
+            b.build_libs(sys.argv[2])
         exit(0)
 
     Builder().work()
