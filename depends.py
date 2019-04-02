@@ -144,9 +144,9 @@ class Builder(object):
         os.chdir(now_path)
 
 
-    def build_libs(self):
+    def build_libs(self, sp_name=None):
         for name, attr in config["depends"].items():
-            if name == "ninja":
+            if name == "ninja" or (sp_name and sp_name != name):
                 continue
             self.build_one_lib(name, "", attr.get('cmake_args'))
 
@@ -172,7 +172,10 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         if sys.argv[1] == "clean":
             Builder().clean()
-            exit(0)
-
+        if sys.argv[1] == "build":
+            b = Builder()
+            b.build_ninja(sys.argv[2])
+            b.build_libs()
+        exit(0)
 
     Builder().work()
